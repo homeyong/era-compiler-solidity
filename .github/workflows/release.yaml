@@ -115,6 +115,12 @@ jobs:
         if: runner.os == 'Windows'
         uses: matter-labs/era-compiler-ci/.github/actions/prepare-msys@v1
 
+      - name: Install Git for Windows (includes sh)
+        if: runner.os == 'Windows'
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/git-for-windows/git/releases/latest/download/Git-64-bit.exe" -OutFile "Git-64-bit.exe"
+          Start-Process -FilePath ".\Git-64-bit.exe" -ArgumentList "/VERYSILENT" -NoNewWindow -Wait
+
       - name: Build LLVM
         uses: matter-labs/era-compiler-ci/.github/actions/build-llvm@v1
         with:
