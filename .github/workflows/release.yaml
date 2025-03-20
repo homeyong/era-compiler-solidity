@@ -118,7 +118,7 @@ jobs:
       - name: Install Git for Windows (includes sh)
         if: runner.os == 'Windows'
         run: |
-          Invoke-WebRequest -Uri "https://github.com/git-for-windows/git/releases/latest/download/Git-64-bit.exe" -OutFile "Git-64-bit.exe"
+          Invoke-WebRequest -Uri "https://github.com/git-for-windows/git/releases/download/v2.49.0.windows.1/Git-2.49.0-64-bit.exe" -OutFile "Git-64-bit.exe"
           Start-Process -FilePath ".\Git-64-bit.exe" -ArgumentList "/VERYSILENT" -NoNewWindow -Wait
 
       - name: Build LLVM
