@@ -111,10 +111,12 @@ jobs:
         with:
           ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.ref || '' }}
           
-      - name: Install Git for Windows using Chocolatey
+      - name: Uninstall Existing Git
         if: runner.os == 'Windows'
+        continue-on-error: true
         run: |
-          choco install git --yes --force
+          choco uninstall git --yes --force
+          Remove-Item -Path "C:\Program Files\Git" -Recurse -Force -ErrorAction Ignore
           
       - name: Prepare Windows env
         if: runner.os == 'Windows'
