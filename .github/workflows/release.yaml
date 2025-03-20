@@ -113,33 +113,27 @@ jobs:
           
       - name: Install Git for Windows (Includes sh.exe)
         run: |
-          curl -L -o Git-64-bit.exe https://github.com/git-for-windows/git/releases/latest/download/Git-64-bit.exe
+          Invoke-WebRequest -Uri "https://github.com/git-for-windows/git/releases/download/v2.49.0.windows.1/Git-2.49.0-64-bit.exe" -OutFile "Git-64-bit.exe"
           Start-Process -FilePath ".\Git-64-bit.exe" -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /NOCANCEL /SP-" -NoNewWindow -Wait
+        shell: powershell
+
+      - name: Add Git Bash to PATH
+        run: |
+          echo "C:\Program Files\Git\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          echo "C:\Program Files\Git\usr\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
         shell: powershell
 
       - name: Verify Git Installation
         run: |
-          where git || echo "Git installation failed!"
-          where sh || echo "sh.exe not found!"
-        shell: cmd
+          Get-Command git -ErrorAction SilentlyContinue || echo "Git installation failed!"
+          Get-Command sh -ErrorAction SilentlyContinue || echo "sh.exe not found!"
+        shell: powershell
 
-      - name: Manually Add Git Bash to PATH
+      - name: Force PowerShell to Use `sh.exe`
         run: |
-          echo "C:\Program Files\Git\bin" >> $GITHUB_PATH
-          echo "C:\Program Files\Git\usr\bin" >> $GITHUB_PATH
-        shell: bash
-
-      - name: Final Verification for sh.exe
-        run: |
-          where sh || echo "sh.exe is still missing!"
-          sh --version || echo "sh command failed!"
-        shell: cmd
-
-      - name: Run Shell Script Using Git Bash
-        run: |
-          echo "Running shell script on Windows using Git Bash..."
-          sh -c "echo 'Hello from Git Bash!'"
-        shell: cmd
+          echo "Forcing PowerShell to use sh.exe..."
+          & "C:\Program Files\Git\bin\sh.exe" -c "echo 'Hello from Git Bash in PowerShell!'"
+        shell: powershell
 
       - name: Prepare Windows env
         if: runner.os == 'Windows'
