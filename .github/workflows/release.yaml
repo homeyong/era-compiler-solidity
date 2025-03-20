@@ -115,11 +115,11 @@ jobs:
         if: runner.os == 'Windows'
         uses: matter-labs/era-compiler-ci/.github/actions/prepare-msys@v1
 
-      - name: Install Git for Windows (includes sh)
+      - name: Install Git for Windows using Chocolatey
         if: runner.os == 'Windows'
         run: |
-          Invoke-WebRequest -Uri "https://github.com/git-for-windows/git/releases/download/v2.49.0.windows.1/Git-2.49.0-64-bit.exe" -OutFile "Git-64-bit.exe"
-          Start-Process -FilePath ".\Git-64-bit.exe" -ArgumentList "/VERYSILENT" -NoNewWindow -Wait
+          choco install git --yes --force
+          echo "C:\Program Files\Git\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Build LLVM
         uses: matter-labs/era-compiler-ci/.github/actions/build-llvm@v1
