@@ -123,11 +123,11 @@ jobs:
           echo "C:\Program Files\Git\usr\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
         shell: powershell
 
-      - name: Verify Git Installation
+      - name: Final Verification for sh.exe
         run: |
-          Get-Command git -ErrorAction SilentlyContinue || echo "Git installation failed!"
-          Get-Command sh -ErrorAction SilentlyContinue || echo "sh.exe not found!"
-        shell: powershell
+          where sh || echo "sh.exe is still missing!"
+          sh --version || echo "sh command failed!"
+        shell: cmd
 
       - name: Force PowerShell to Use `sh.exe`
         run: |
